@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <!-- Required meta tags -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js" integrity="sha512-WNLxfP/8cVYL9sj8Jnp6et0BkubLP31jhTG9vhL/F5uEZmg5wEzKoXp1kJslzPQWwPT1eyMiSxlKCgzHLOTOTQ==" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    	function editar(parametros){
+    		var campos = parametros.split('|');
+    		document.getElementById("id").value = campos[0];
+    		document.getElementById("nome").value = campos[1];
+    		document.getElementById("email").value = campos[2];
+    		document.getElementById("perfil").value = campos[3];
+    		document.getElementById("status").value = campos[4];
+    	}
+    	
+    	function excluir(id){
+            var json = {"id":id,"acao":"excluir"};
+            
+            $.ajax({
+                url:"UsuarioServlet",
+                data: json,
+                type: "get",
+                success: function(resp){
+                	var vetor_json = JSON.parse(resp);
+                	alert(vetor_json[0].msg);
+                	buscar();
+                }
+            });
+    	}
+    	function buscar(){
+            var camponome = document.getElementById("nome").value;
+            var json = {"nome":camponome, "acao":"buscar"};
+    		
+    		$.ajax({
+                url:"UsuarioServlet",
+                data: json,
+                type: "get",
+                success: function(resp){
+		    		var json = JSON.parse(resp);
+		    		var linha = "";
+		    		for (indice in json){
+                        var id    = json[indice].id;
+                        var nome  = json[indice].nome;
+                        var email = json[indice].email;
+                        var perfil = json[indice].perfil;
+                        var status = json[indice].status;
+                        
+                        var parametros = id+"|"+nome+"|"+email+"|"+perfil+"|"+status;
+                        	
+                        linha += '<tr>' +
+	  				      '<td>' + id + '</td>' +
+	  				      '<td>' + nome + '</td>' +
+	  				      '<td>' + email + '</td>' +
+	  				      '<td>' + perfil + '</td>' +
+	  				      '<td>' + status + '</td>' +
+	  				      '<td><button type="button" class="btn btn-danger" onClick="excluir('+ id + ')">excluir</button>' +
+	  					  '<button type="button" class="btn btn-warning" onClick="editar(\'' + parametros + '\')">editar</button></td>' +
+	  				    '</tr>';
+		    		}
+                    var tbody = document.getElementById("tbody_table");                        
+				    tbody.innerHTML = linha;
+                }
+            });
+    	}
+    	
+    	function salvar_dados(){
+        	
+    		var id = document.getElementById("id").value;
+    		var nome = document.getElementById("nome").value;
+    		var senha = document.getElementById("senha").value;
+    		var email = document.getElementById("email").value;
+    		var perfil = document.getElementById("perfil").value;
+    		var status = document.getElementById("status").value;
+    		
+            var json = {"id":id,"nome":nome,"senha":senha,"email":email,"perfil":perfil,"status":status, "acao":"salvar"};
+                             
+            $.ajax({
+                url:"UsuarioServlet",
+                data: json,
+                type: "get",
+                success: function(resp){
+                	var vetor_json = JSON.parse(resp);
+                	alert(vetor_json[0].msg);
+                	buscar();
+                }
+            });
+            
+        }
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Área de cadastro</title>
+  </head>
+   
+    <body style="background-image: url('img/bck2.jpeg'); background-repeat: no-repeat; background-attachment: fixed; background-size: 100% 100%;">
+       
+	<div class="container-center-md">  
+        	    <a class="col-md-3" align="center" href="index.html">
+	      <h1>eGulas Inicio</h1>
+	    </a>
+	  <div class="row pb-1 justify-content-md-center">
+          <div class="col-md-3" align="center">
+	      <h4>Cadastro de Usuários</h4>
+	    </div>
+	  </div>   
+	  <br>	
+	<form>
+	  <div class="row pb-1 justify-content-md-center">
+	    <div class="col-md-1" align="right">
+	      ID
+	    </div>
+	    <div class="col-md-2" align="center">
+	      <input id="id" name="id" class="form-control" type="text" placeholder="ID" disabled >
+	    </div>
+	   	<div class="col-md-1" align="right">
+	      E-mail
+	    </div>
+	    <div class="col-md-2" align="center">
+	      <input id="email" name="email" class="form-control" type="text" placeholder="E-mail">
+	    </div>
+	  </div>
+	  <div class="row pb-1 justify-content-md-center">
+	    <div class="col-md-1" align="right">
+	      Nome
+	    </div>
+	    <div class="col-md-2" align="center">
+	      <input  id="nome" name="nome" class="form-control" type="text" placeholder="Nome">
+	    </div>
+		<div class="col-md-1" align="right">
+	      Perfil
+	    </div>
+	    <div class="col-md-2" align="center">				
+		    <select id="perfil" name="perfil" class="form-control" placeholder="Selecione">
+		    	  <option value="" disabled selected>Selecione</option>
+		    	  <option value="Administrador">Cliente PREMIUM</option>
+				  <option value="Colaborador">Cliente VIP</option>
+				  <option value="Cliente">Cliente</option>
+		    </select>
+	    </div>
+	  </div>
+	  <div class="row pb-1 justify-content-md-center">
+	    <div class="col-md-1" align="right">
+	      Senha
+	    </div>
+	    <div class="col-md-2" align="center">
+	      <input id="senha" name="senha" type="password" class="form-control" placeholder="Senha">
+	    </div>
+	    <div class="col-md-1" align="right">
+	      Status
+	    </div>
+	    <div class="col-md-2" align="center">				
+		    <select id="status" name="status" class="form-control" placeholder="Selecione">
+		    	  <option value="" disabled selected>Selecione</option>
+				  <option value="Bloqueado">Não receber</option>
+				  <option value="Ativo">Desejo receber receitas semanalmente</option>
+		    </select>
+	    </div>
+	  </div>
+	  
+	  <br>
+	  <div class="row pb-1 justify-content-md-center">
+	    <div class="col-md-8"  align="center">
+	      <button type="button" class="btn btn-primary" onClick="buscar()">CONSULTAR</button>
+	      <button type="button" class="btn btn-primary" onClick="salvar_dados()">SALVAR</button>
+	      <button type="reset" class="btn btn-primary">LIMPAR</button>
+	    </div>
+	  </div>
+	  
+	</form>
+
+
+
+
+	  <br>
+	  <br>
+	  <div class="row justify-content-md-center">
+	   	<div class="col-md-8"   align="center">
+			<table class="table table-striped">
+			  <thead>
+			    <tr>
+			      <th scope="col">ID</th>
+			      <th scope="col">NOME</th>
+			      <th scope="col">E-MAIL</th>
+			      <th scope="col">PERFIL</th>
+			      <th scope="col">STATUS</th>
+			      <th scope="col">EXCLUIR/ EDITAR</th>
+			    </tr>
+			  </thead>
+			  <tbody id="tbody_table">
+			  </tbody>
+			</table>
+	    </div>
+	  </div>
+	</div>
+    <script src="bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  </body>                                                  
+</html>
+
+
+
