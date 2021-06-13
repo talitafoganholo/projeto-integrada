@@ -7,7 +7,7 @@ Na View tem a index que contém o código front do site, que usamos um modelo do
 No model temos o ConnectionFactory que faz a conexão com o banco de dados e as classes UsuarioBean o “Bean” é uma classe Java normal, com variáveis privadas e métodos Get/Set e UsuarioDao que tem como principal propósito abstrair o acesso a fonte de dados da sua aplicação.
 No controller temos o UsuarioServlet que é quando você recebe sua requisição na view, você precisa receber essa requisição, processar de alguma forma e enviar uma resposta. A Servlet recebe sua requisição, processa ou envia pra alguém processar e então retorna a resposta pra onde necessitar.
 E por fim temos a página de cadastro que local está rodando e cadastrando normalmente.
-O site foi hospedado no cloud da AWS na EC2 como um site estático, então a página de cadastro não está funcionando pois o banco de dados não está hospedado.
+O site foi hospedado no cloud da AWS como um site estático, então a página de cadastro não está funcionando pois o banco de dados não está hospedado.
 
 Temos um vídeo no youtube mostrando as telas e mostrando os códigos: https://www.youtube.com/watch?v=9vbTsEovsG4
 
